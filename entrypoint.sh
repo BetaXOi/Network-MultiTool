@@ -19,7 +19,8 @@ if [ -z "${MOUNT_CHECK}" ] ; then
   #   The 'ip -j route' shows JSON output, 
   #     and always shows the default route as the first entry.
   #     It also shows the correct device name as 'prefsrc', with correct IP address. 
-  CONTAINER_IP=$(ip -j route get 1 | jq -r '.[0] .prefsrc')
+  #CONTAINER_IP=$(ip -j route get 1 | jq -r '.[0] .prefsrc')
+  CONTAINER_IP=$(ip addr show | grep inet | grep -v 127.0.0.1 | grep -v ::1/128 | grep -v fe80:: |awk '{print $2}' |xargs)
 
   # Reduced the information in just one line. It overwrites the default text.
   echo -e "WBITT Network MultiTool (with NGINX) - ${HOSTNAME} - ${CONTAINER_IP} - HTTP: ${HTTP_PORT:-80} , HTTPS: ${HTTPS_PORT:-443} . (Formerly praqma/network-multitool)" | tee  ${WEB_ROOT}/index.html 
